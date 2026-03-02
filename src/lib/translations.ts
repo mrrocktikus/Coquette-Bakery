@@ -89,7 +89,11 @@ export const translations = {
     'log-action': 'Action',
     'log-time': 'Time',
     'log-details': 'Details',
-    'theme-success': 'Theme settings updated successfully!'
+    'theme-success': 'Theme settings updated successfully!',
+    'header-color': 'Upperside Color',
+    'button-color': 'Button Color',
+    'set-default': 'Set to Default',
+    'dark-mode': 'Dark Mode'
   },
   ms: {
     'dashboard': 'Papan Pemantauan',
@@ -181,7 +185,11 @@ export const translations = {
     'log-action': 'Tindakan',
     'log-time': 'Masa',
     'log-details': 'Butiran',
-    'theme-success': 'Tetapan tema berjaya dikemas kini!'
+    'theme-success': 'Tetapan tema berjaya dikemas kini!',
+    'header-color': 'Warna Bahagian Atas',
+    'button-color': 'Warna Butang',
+    'set-default': 'Tetapkan ke Asal',
+    'dark-mode': 'Mod Gelap'
   }
 };
 

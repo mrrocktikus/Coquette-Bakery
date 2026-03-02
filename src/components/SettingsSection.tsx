@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { User, Mail, Shield, Download, Upload, Database, Palette, History, Building2, Image as ImageIcon } from 'lucide-react';
+import { User, Mail, Shield, Download, Upload, Database, Palette, History, Building2, Image as ImageIcon, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,7 +22,10 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
   const [email, setEmail] = useState('');
   const [companyName, setCompanyName] = useState('Coquette Bakery');
   const [logo, setLogo] = useState('https://i.imgur.com/IyEvnDs.png');
+  const [headerColor, setHeaderColor] = useState('#ffffff');
+  const [buttonColor, setButtonColor] = useState('#e8a0b0');
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,12 +34,16 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
     const savedEmail = localStorage.getItem('user_email');
     const savedCompany = localStorage.getItem('company_name');
     const savedLogo = localStorage.getItem('company_logo');
+    const savedHeader = localStorage.getItem('theme_header_color');
+    const savedButton = localStorage.getItem('theme_button_color');
     const savedLogs = localStorage.getItem('bakery_audit_logs');
 
     if (savedName) setName(savedName);
     if (savedEmail) setEmail(savedEmail);
     if (savedCompany) setCompanyName(savedCompany);
     if (savedLogo) setLogo(savedLogo);
+    if (savedHeader) setHeaderColor(savedHeader);
+    if (savedButton) setButtonColor(savedButton);
     if (savedLogs) setAuditLogs(JSON.parse(savedLogs));
   }, []);
 
@@ -49,6 +56,23 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
   const handleSaveTheme = () => {
     localStorage.setItem('company_name', companyName);
     localStorage.setItem('company_logo', logo);
+    localStorage.setItem('theme_header_color', headerColor);
+    localStorage.setItem('theme_button_color', buttonColor);
+    showSuccess(t('theme-success'));
+    setTimeout(() => window.location.reload(), 1000);
+  };
+
+  const handleSetDefault = () => {
+    setCompanyName('Coquette Bakery');
+    setLogo('https://i.imgur.com/IyEvnDs.png');
+    setHeaderColor('#ffffff');
+    setButtonColor('#e8a0b0');
+    
+    localStorage.setItem('company_name', 'Coquette Bakery');
+    localStorage.setItem('company_logo', 'https://i.imgur.com/IyEvnDs.png');
+    localStorage.setItem('theme_header_color', '#ffffff');
+    localStorage.setItem('theme_button_color', '#e8a0b0');
+    
     showSuccess(t('theme-success'));
     setTimeout(() => window.location.reload(), 1000);
   };
@@ -75,6 +99,8 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
       user_email: localStorage.getItem('user_email'),
       company_name: localStorage.getItem('company_name'),
       company_logo: localStorage.getItem('company_logo'),
+      theme_header_color: localStorage.getItem('theme_header_color'),
+      theme_button_color: localStorage.getItem('theme_button_color'),
       export_date: new Date().toISOString()
     };
 
@@ -108,6 +134,8 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
         if (data.user_email) localStorage.setItem('user_email', data.user_email);
         if (data.company_name) localStorage.setItem('company_name', data.company_name);
         if (data.company_logo) localStorage.setItem('company_logo', data.company_logo);
+        if (data.theme_header_color) localStorage.setItem('theme_header_color', data.theme_header_color);
+        if (data.theme_button_color) localStorage.setItem('theme_button_color', data.theme_button_color);
 
         showSuccess(t('restore-success'));
         setTimeout(() => window.location.reload(), 1500);
@@ -118,7 +146,6 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
     reader.readAsText(file);
   };
 
-  // Common container class for all settings boxes to ensure same size and centering
   const settingsBoxClass = "card-cute p-8 max-w-4xl mx-auto w-full";
 
   return (
@@ -172,15 +199,6 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
                 </Label>
                 <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" className="rounded-xl border-2 border-rose-200 dark:border-rose-800 dark:bg-rose-900/10 dark:text-gray-200" />
               </div>
-              <div className="p-6 bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 rounded-2xl border-2 border-rose-100 dark:border-rose-900">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <p className="font-bold text-gray-800 dark:text-gray-200">Dark Mode</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Toggle dark theme for comfortable viewing</p>
-                  </div>
-                  <Switch checked={isDark} onCheckedChange={onToggleDark} />
-                </div>
-              </div>
               <Button onClick={handleSaveProfile} className="w-full h-12 rounded-xl btn-rose font-bold text-lg">
                 {t('save')}
               </Button>
@@ -190,31 +208,92 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
 
         <TabsContent value="theme">
           <div className={settingsBoxClass}>
-            <h3 className="playfair text-xl font-bold text-rose-500 mb-8">{t('theme-customization')}</h3>
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="playfair text-xl font-bold text-rose-500">{t('theme-customization')}</h3>
+              <Button onClick={handleSetDefault} variant="ghost" size="sm" className="text-rose-400 hover:text-rose-600">
+                <RotateCcw className="w-4 h-4 mr-2" />
+                {t('set-default')}
+              </Button>
+            </div>
+            
             <div className="space-y-6">
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 dark:text-gray-200">
-                  <Building2 className="w-4 h-4 text-rose-400" />
-                  {t('company-name')}
-                </Label>
-                <Input value={companyName} onChange={(e) => setCompanyName(e.target.value)} className="rounded-xl border-2 border-rose-200 dark:border-rose-800 dark:bg-rose-900/10 dark:text-gray-200" />
+              <div className="p-6 bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 rounded-2xl border-2 border-rose-100 dark:border-rose-900">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <p className="font-bold text-gray-800 dark:text-gray-200">{t('dark-mode')}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Toggle dark theme for comfortable viewing</p>
+                  </div>
+                  <Switch checked={isDark} onCheckedChange={onToggleDark} />
+                </div>
               </div>
-              <div className="space-y-4">
-                <Label className="flex items-center gap-2 dark:text-gray-200">
-                  <ImageIcon className="w-4 h-4 text-rose-400" />
-                  {t('upload-logo')}
-                </Label>
-                <div className="flex items-center gap-6 p-6 bg-rose-50/30 dark:bg-rose-900/10 rounded-2xl border-2 border-dashed border-rose-200 dark:border-rose-800">
-                  <img src={logo} alt="Logo Preview" className="w-20 h-20 rounded-2xl object-cover shadow-md" />
-                  <div className="flex-1">
-                    <input type="file" ref={logoInputRef} onChange={handleLogoUpload} accept="image/*" className="hidden" />
-                    <Button onClick={() => logoInputRef.current?.click()} variant="outline" className="w-full h-12 rounded-xl border-2 border-rose-200 text-rose-500 hover:bg-rose-50">
-                      <Upload className="w-4 h-4 mr-2" />
-                      {t('upload-logo')}
-                    </Button>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 dark:text-gray-200">
+                    <Building2 className="w-4 h-4 text-rose-400" />
+                    {t('company-name')}
+                  </Label>
+                  <Input value={companyName} onChange={(e) => setCompanyName(e.target.value)} className="rounded-xl border-2 border-rose-200 dark:border-rose-800 dark:bg-rose-900/10 dark:text-gray-200" />
+                </div>
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 dark:text-gray-200">
+                    <Palette className="w-4 h-4 text-rose-400" />
+                    {t('header-color')}
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input 
+                      type="color" 
+                      value={headerColor} 
+                      onChange={(e) => setHeaderColor(e.target.value)} 
+                      className="w-12 h-10 p-1 rounded-lg border-2 border-rose-200 cursor-pointer" 
+                    />
+                    <Input 
+                      value={headerColor} 
+                      onChange={(e) => setHeaderColor(e.target.value)} 
+                      className="flex-1 rounded-xl border-2 border-rose-200 dark:border-rose-800 dark:bg-rose-900/10 dark:text-gray-200" 
+                    />
                   </div>
                 </div>
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 dark:text-gray-200">
+                    <Palette className="w-4 h-4 text-rose-400" />
+                    {t('button-color')}
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input 
+                      type="color" 
+                      value={buttonColor} 
+                      onChange={(e) => setButtonColor(e.target.value)} 
+                      className="w-12 h-10 p-1 rounded-lg border-2 border-rose-200 cursor-pointer" 
+                    />
+                    <Input 
+                      value={buttonColor} 
+                      onChange={(e) => setButtonColor(e.target.value)} 
+                      className="flex-1 rounded-xl border-2 border-rose-200 dark:border-rose-800 dark:bg-rose-900/10 dark:text-gray-200" 
+                    />
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <Label className="flex items-center gap-2 dark:text-gray-200">
+                    <ImageIcon className="w-4 h-4 text-rose-400" />
+                    {t('upload-logo')}
+                  </Label>
+                  <div className="flex items-center gap-4 p-4 bg-rose-50/30 dark:bg-rose-900/10 rounded-2xl border-2 border-dashed border-rose-200 dark:border-rose-800">
+                    <img src={logo} alt="Logo Preview" className="w-12 h-12 rounded-xl object-cover shadow-md" />
+                    <div className="flex-1">
+                      <input type="file" ref={logoInputRef} onChange={handleLogoUpload} accept="image/*" className="hidden" />
+                      <Button onClick={() => logoInputRef.current?.click()} variant="outline" size="sm" className="w-full h-10 rounded-xl border-2 border-rose-200 text-rose-500 hover:bg-rose-50">
+                        <Upload className="w-4 h-4 mr-2" />
+                        {t('upload-logo')}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <Button onClick={handleSaveTheme} className="w-full h-12 rounded-xl btn-rose font-bold text-lg">
                 {t('save')}
               </Button>

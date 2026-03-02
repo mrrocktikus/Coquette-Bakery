@@ -51,6 +51,9 @@ const Dashboard = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [companyName, setCompanyName] = useState('Coquette Bakery');
   const [logo, setLogo] = useState('https://i.imgur.com/IyEvnDs.png');
+  const [headerColor, setHeaderColor] = useState('#ffffff');
+  const [buttonColor, setButtonColor] = useState('#e8a0b0');
+  
   const inventoryHook = useInventory();
   const t = (key: string) => translations[lang][key as keyof typeof translations['en']] || key;
 
@@ -67,8 +70,13 @@ const Dashboard = () => {
   useEffect(() => {
     const savedCompany = localStorage.getItem('company_name');
     const savedLogo = localStorage.getItem('company_logo');
+    const savedHeader = localStorage.getItem('theme_header_color');
+    const savedButton = localStorage.getItem('theme_button_color');
+    
     if (savedCompany) setCompanyName(savedCompany);
     if (savedLogo) setLogo(savedLogo);
+    if (savedHeader) setHeaderColor(savedHeader);
+    if (savedButton) setButtonColor(savedButton);
   }, []);
 
   const addNotification = (message: string, type: Notification['type'] = 'info') => {
@@ -112,8 +120,22 @@ const Dashboard = () => {
 
   return (
     <div className={`min-h-screen flex flex-col bg-[#f9f5f2] dark:bg-[#1a1a2e] transition-colors duration-300`}>
+      {/* Dynamic Theme Styles */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .btn-rose { 
+          background: ${buttonColor} !important; 
+          border-color: ${buttonColor} !important;
+        }
+        .btn-rose:hover {
+          filter: brightness(0.9);
+        }
+        nav.custom-header {
+          background-color: ${isDark ? 'transparent' : headerColor} !important;
+        }
+      `}} />
+
       {/* Navigation Header */}
-      <nav className="bg-white dark:bg-card shadow-md border-b-2 border-[#e8a0b0] px-6 py-4 sticky top-0 z-50">
+      <nav className="custom-header bg-white dark:bg-card shadow-md border-b-2 border-[#e8a0b0] px-6 py-4 sticky top-0 z-50">
         <div className="max-w-[1400px] mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <img 
