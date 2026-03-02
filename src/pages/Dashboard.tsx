@@ -135,22 +135,22 @@ const Dashboard = () => {
       `}} />
 
       {/* Navigation Header */}
-      <nav className="custom-header bg-white dark:bg-card shadow-md border-b-2 border-[#e8a0b0] px-6 py-4 sticky top-0 z-50">
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
+      <nav className="custom-header bg-white dark:bg-card shadow-md border-b-2 border-[#e8a0b0] px-8 py-6 sticky top-0 z-50">
+        <div className="max-w-[1400px] mx-auto flex items-center justify-between gap-6">
+          <div className="flex items-center gap-6">
             <img 
               src={logo} 
               alt="Logo" 
-              className="w-12 h-12 rounded-xl shadow-md object-cover float-animation" 
+              className="w-16 h-16 rounded-2xl shadow-lg object-cover float-animation" 
             />
             <div className="hidden sm:block">
-              <h1 className="playfair text-xl font-bold text-rose-500">{companyName}</h1>
-              <p className="text-xs text-rose-400 font-semibold">Welcome, {username}!</p>
+              <h1 className="playfair text-2xl font-bold text-rose-500">{companyName}</h1>
+              <p className="text-sm text-rose-400 font-semibold">Welcome, {username}!</p>
             </div>
           </div>
 
           <div className="flex-1 max-w-md relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-rose-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-rose-400" />
             <Input 
               placeholder={t('search')} 
               value={searchTerm}
@@ -158,24 +158,24 @@ const Dashboard = () => {
                 setSearchTerm(e.target.value);
                 if (activeSection !== 'inventory') setActiveSection('inventory');
               }}
-              className="pl-10 rounded-2xl border-2 border-[#e8a0b0] bg-rose-50/50 dark:bg-rose-900/10"
+              className="pl-12 h-12 rounded-2xl border-2 border-[#e8a0b0] bg-rose-50/50 dark:bg-rose-900/10 text-lg"
             />
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={() => setLang(lang === 'en' ? 'ms' : 'en')} className="text-rose-500">
-              <Globe className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" onClick={() => setLang(lang === 'en' ? 'ms' : 'en')} className="text-rose-500 w-12 h-12">
+              <Globe className="w-6 h-6" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="text-rose-500">
-              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="text-rose-500 w-12 h-12">
+              {isDark ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
             </Button>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-rose-500 relative">
-                  <Bell className="w-5 h-5" />
+                <Button variant="ghost" size="icon" className="text-rose-500 relative w-12 h-12">
+                  <Bell className="w-6 h-6" />
                   {notifications.length > 0 && (
-                    <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                    <span className="absolute top-3 right-3 w-3 h-3 bg-red-500 rounded-full animate-pulse border-2 border-white dark:border-card"></span>
                   )}
                 </Button>
               </DropdownMenuTrigger>
@@ -199,27 +199,27 @@ const Dashboard = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button variant="outline" onClick={handleLogout} className="hidden md:flex border-2 border-rose-200 text-rose-500 hover:bg-rose-50 rounded-xl dark:border-rose-800 dark:text-rose-400">
-              <LogOut className="w-4 h-4 mr-2" />
+            <Button variant="outline" onClick={handleLogout} className="hidden md:flex h-12 px-6 border-2 border-rose-200 text-rose-500 hover:bg-rose-50 rounded-xl dark:border-rose-800 dark:text-rose-400 font-bold">
+              <LogOut className="w-5 h-5 mr-2" />
               {t('logout')}
             </Button>
           </div>
         </div>
 
         {/* Centered Navigation Links */}
-        <div className="max-w-[1400px] mx-auto mt-4 flex justify-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="max-w-[1400px] mx-auto mt-6 flex justify-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
           {navItems.map((item) => (
             <Button
               key={item.id}
               variant={activeSection === item.id ? "default" : "ghost"}
               onClick={() => setActiveSection(item.id)}
-              className={`rounded-full px-6 whitespace-nowrap transition-all duration-300 ${
+              className={`rounded-full px-8 h-12 whitespace-nowrap transition-all duration-300 text-base font-semibold ${
                 activeSection === item.id 
                   ? "btn-rose" 
                   : "text-rose-400 hover:bg-rose-50 hover:text-rose-600 dark:text-rose-300 dark:hover:bg-rose-900/20"
               }`}
             >
-              <item.icon className="w-4 h-4 mr-2" />
+              <item.icon className="w-5 h-5 mr-2" />
               {item.label}
             </Button>
           ))}
