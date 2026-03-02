@@ -32,6 +32,13 @@ export interface MaintenanceRequest {
   created_at: string;
 }
 
+export interface AuditLog {
+  id: string;
+  action: string;
+  details: string;
+  timestamp: string;
+}
+
 export function useInventory() {
   const [inventory, setInventory] = useState<InventoryItem[]>(() => {
     const saved = localStorage.getItem('bakery_inventory');
@@ -48,6 +55,11 @@ export function useInventory() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => {
+    const saved = localStorage.getItem('bakery_audit_logs');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   useEffect(() => {
     localStorage.setItem('bakery_inventory', JSON.stringify(inventory));
   }, [inventory]);
@@ -59,6 +71,20 @@ export function useInventory() {
   useEffect(() => {
     localStorage.setItem('bakery_maintenance', JSON.stringify(maintenance));
   }, [maintenance]);
+
+  useEffect(() => {
+    localStorage.setItem('bakery_audit_logs', JSON.stringify(auditLogs));
+  }, [auditLogs]);
+
+  const addLog = (action: string, details: string) => {
+    const newLog: AuditLog = {
+      id: Math.random().toString(36).substr(2, 9),
+      action,
+      details,
+      timestamp: new Date().toISOString(),
+    };
+    setAuditLogs(prev => [newLog, ...prev].slice(0, 100));
+  };
 
   const getStatus = (qty: number): InventoryItem['status'] => {
     if (qty === 0) return 'Out of Stock';
@@ -74,10 +100,12 @@ export function useInventory() {
       created_at: new Date().toISOString(),
     };
     setInventory(prev => [...prev, newItem]);
+    addLog('Register Item', `Registered new item: ${item.item_name}`);
     showSuccess(`"${item.item_name}" registered successfully!`);
   };
 
   const updateItem = (id: string, updates: Partial<InventoryItem>) => {
+    const item = inventory.find(i => i.id === id);
     setInventory(prev => prev.map(item => {
       if (item.id === id) {
         const updated = { ...item, ...updates };
@@ -88,10 +116,17 @@ export function useInventory() {
       }
       return item;
     }));
+    if (item) {
+      addLog('Update Item', `Updated item: ${item.item_name}`);
+    }
   };
 
   const deleteItem = (id: string) => {
+    const item = inventory.find(i => i.id === id);
     setInventory(prev => prev.filter(item => item.id !== id));
+    if (item) {
+      addLog('Delete Item', `Deleted item: ${item.item_name}`);
+    }
     showSuccess('Item deleted successfully');
   };
 
@@ -116,6 +151,7 @@ export function useInventory() {
       created_at: new Date().toISOString(),
     };
     setMovements(prev => [...prev, newMovement]);
+    addLog('Stock Movement', `${movement.movement_type.toUpperCase()} - ${movement.quantity} units of ${movement.item_name}`);
     showSuccess(`Stock ${movement.movement_type} recorded`);
   };
 
@@ -127,18 +163,27 @@ export function useInventory() {
       created_at: new Date().toISOString(),
     };
     setMaintenance(prev => [...prev, newRequest]);
+    addLog('Maintenance Request', `Submitted ${request.issue_type} for ${request.equipment_name}`);
     showSuccess('Maintenance request submitted');
   };
 
   const resolveMaintenance = (id: string) => {
+    const req = maintenance.find(m => m.id === id);
     setMaintenance(prev => prev.map(m => 
       m.id === id ? { ...m, status: 'fixed' } : m
     ));
+    if (req) {
+      addLog('Resolve Maintenance', `Marked ${req.equipment_name} issue as fixed`);
+    }
     showSuccess('Issue marked as fixed');
   };
 
   const deleteMaintenance = (id: string) => {
+    const req = maintenance.find(m => m.id === id);
     setMaintenance(prev => prev.filter(m => m.id !== id));
+    if (req) {
+      addLog('Delete Maintenance', `Deleted maintenance record for ${req.equipment_name}`);
+    }
   };
 
   const deleteMovement = (id: string) => {
@@ -154,6 +199,7 @@ export function useInventory() {
     }
 
     setMovements(prev => prev.filter(m => m.id !== id));
+    addLog('Delete Movement', `Deleted movement record for ${movement.item_name}`);
     showSuccess('Movement record deleted and stock restored');
   };
 
@@ -161,6 +207,7 @@ export function useInventory() {
     inventory,
     movements,
     maintenance,
+    auditLogs,
     addItem,
     updateItem,
     deleteItem,

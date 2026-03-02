@@ -49,11 +49,12 @@ const Dashboard = () => {
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
   const [searchTerm, setSearchTerm] = useState('');
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [companyName, setCompanyName] = useState('Coquette Bakery');
+  const [logo, setLogo] = useState('https://i.imgur.com/IyEvnDs.png');
   const inventoryHook = useInventory();
   const t = (key: string) => translations[lang][key as keyof typeof translations['en']] || key;
 
-  // Mock username for the welcome message
-  const username = "Ling Chung Seng";
+  const username = localStorage.getItem('user_name') || "Ling Chung Seng";
 
   useEffect(() => {
     if (isDark) {
@@ -62,6 +63,13 @@ const Dashboard = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [isDark]);
+
+  useEffect(() => {
+    const savedCompany = localStorage.getItem('company_name');
+    const savedLogo = localStorage.getItem('company_logo');
+    if (savedCompany) setCompanyName(savedCompany);
+    if (savedLogo) setLogo(savedLogo);
+  }, []);
 
   const addNotification = (message: string, type: Notification['type'] = 'info') => {
     const newNotif = {
@@ -109,12 +117,12 @@ const Dashboard = () => {
         <div className="max-w-[1400px] mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <img 
-              src="https://i.imgur.com/IyEvnDs.png" 
+              src={logo} 
               alt="Logo" 
               className="w-12 h-12 rounded-xl shadow-md object-cover float-animation" 
             />
             <div className="hidden sm:block">
-              <h1 className="playfair text-xl font-bold text-rose-500">Coquette Bakery</h1>
+              <h1 className="playfair text-xl font-bold text-rose-500">{companyName}</h1>
               <p className="text-xs text-rose-400 font-semibold">Welcome, {username}!</p>
             </div>
           </div>

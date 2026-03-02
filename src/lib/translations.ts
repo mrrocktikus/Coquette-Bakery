@@ -81,7 +81,15 @@ export const translations = {
     'import-desc': 'Restore your data from a previously exported backup file.',
     'backup-success': 'Data exported successfully!',
     'restore-success': 'Data restored successfully! The page will reload.',
-    'restore-error': 'Invalid backup file.'
+    'restore-error': 'Invalid backup file.',
+    'theme-customization': 'Theme Customization',
+    'company-name': 'Company Name',
+    'upload-logo': 'Upload Logo',
+    'audit-logs': 'Audit Logs',
+    'log-action': 'Action',
+    'log-time': 'Time',
+    'log-details': 'Details',
+    'theme-success': 'Theme settings updated successfully!'
   },
   ms: {
     'dashboard': 'Papan Pemantauan',
@@ -165,7 +173,15 @@ export const translations = {
     'import-desc': 'Pulihkan data anda daripada fail sandaran yang dieksport sebelum ini.',
     'backup-success': 'Data berjaya dieksport!',
     'restore-success': 'Data berjaya dipulihkan! Halaman akan dimuat semula.',
-    'restore-error': 'Fail sandaran tidak sah.'
+    'restore-error': 'Fail sandaran tidak sah.',
+    'theme-customization': 'Penyesuaian Tema',
+    'company-name': 'Nama Syarikat',
+    'upload-logo': 'Muat Naik Logo',
+    'audit-logs': 'Log Audit',
+    'log-action': 'Tindakan',
+    'log-time': 'Masa',
+    'log-details': 'Butiran',
+    'theme-success': 'Tetapan tema berjaya dikemas kini!'
   }
 };
 

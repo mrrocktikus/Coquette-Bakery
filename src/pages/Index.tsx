@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Eye, EyeOff, ArrowLeft, Mail } from 'lucide-react';
@@ -15,6 +15,15 @@ const Index = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
+  const [companyName, setCompanyName] = useState('Coquette Bakery');
+  const [logo, setLogo] = useState('https://i.imgur.com/IyEvnDs.png');
+
+  useEffect(() => {
+    const savedCompany = localStorage.getItem('company_name');
+    const savedLogo = localStorage.getItem('company_logo');
+    if (savedCompany) setCompanyName(savedCompany);
+    if (savedLogo) setLogo(savedLogo);
+  }, []);
 
   const handleRoleSelect = (selectedRole: 'staff' | 'student') => {
     setRole(selectedRole);
@@ -27,7 +36,7 @@ const Index = () => {
     // Mock login
     setTimeout(() => {
       setIsLoading(false);
-      showSuccess('Welcome back to Coquette Bakery!');
+      showSuccess(`Welcome back to ${companyName}!`);
       navigate('/dashboard');
     }, 1000);
   };
@@ -60,13 +69,13 @@ const Index = () => {
         {/* Left Side - Branding */}
         <div className="hidden md:flex flex-col items-center justify-center p-12 rose-gradient w-1/2">
           <motion.img 
-            src="https://i.imgur.com/IyEvnDs.png" 
-            alt="Coquette Bakery" 
+            src={logo} 
+            alt={companyName} 
             className="w-56 h-56 rounded-[50px] mb-6 float-animation shadow-lg object-cover"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
           />
-          <h1 className="playfair text-4xl font-bold text-rose-700 text-center mb-2">Coquette Bakery</h1>
+          <h1 className="playfair text-4xl font-bold text-rose-700 text-center mb-2">{companyName}</h1>
           <p className="playfair text-2xl italic text-rose-700 text-center mb-2 font-light">Sweet, Classy, Coquette.</p>
           <p className="text-sm text-rose-700 text-center font-semibold">Inventory Management System</p>
         </div>
