@@ -103,8 +103,12 @@ const RegisterItem = ({ t, onAdd }: Props) => {
             <Label>{t('qty')}</Label>
             <Input 
               type="number"
-              value={formData.quantity}
-              onChange={(e) => setFormData({...formData, quantity: parseInt(e.target.value) || 0})}
+              value={formData.quantity === 0 ? '' : formData.quantity}
+              onChange={(e) => {
+                const val = e.target.value;
+                setFormData({...formData, quantity: val === '' ? 0 : parseInt(val)});
+              }}
+              placeholder="0"
               className="rounded-xl border-2 border-rose-200 dark:bg-rose-900/10 dark:border-rose-800"
               min="0"
             />
