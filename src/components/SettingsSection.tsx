@@ -118,32 +118,37 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
     reader.readAsText(file);
   };
 
+  // Common container class for all settings boxes to ensure same size and centering
+  const settingsBoxClass = "card-cute p-8 max-w-4xl mx-auto w-full";
+
   return (
     <div className="space-y-8">
-      <h2 className="playfair text-3xl font-bold text-rose-500">{t('settings')}</h2>
+      <h2 className="playfair text-3xl font-bold text-rose-500 text-center">{t('settings')}</h2>
       
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="bg-rose-50/50 dark:bg-rose-900/10 p-1 rounded-2xl border-2 border-rose-100 dark:border-rose-900/20 mb-8">
-          <TabsTrigger value="profile" className="rounded-xl px-6 data-[state=active]:btn-rose">
-            <User className="w-4 h-4 mr-2" />
-            {t('profile')}
-          </TabsTrigger>
-          <TabsTrigger value="theme" className="rounded-xl px-6 data-[state=active]:btn-rose">
-            <Palette className="w-4 h-4 mr-2" />
-            {t('theme-customization')}
-          </TabsTrigger>
-          <TabsTrigger value="audit" className="rounded-xl px-6 data-[state=active]:btn-rose">
-            <History className="w-4 h-4 mr-2" />
-            {t('audit-logs')}
-          </TabsTrigger>
-          <TabsTrigger value="backup" className="rounded-xl px-6 data-[state=active]:btn-rose">
-            <Database className="w-4 h-4 mr-2" />
-            {t('backup-restore')}
-          </TabsTrigger>
-        </TabsList>
+        <div className="flex justify-center mb-8">
+          <TabsList className="bg-rose-50/50 dark:bg-rose-900/10 p-1 rounded-2xl border-2 border-rose-100 dark:border-rose-900/20">
+            <TabsTrigger value="profile" className="rounded-xl px-6 data-[state=active]:btn-rose">
+              <User className="w-4 h-4 mr-2" />
+              {t('profile')}
+            </TabsTrigger>
+            <TabsTrigger value="theme" className="rounded-xl px-6 data-[state=active]:btn-rose">
+              <Palette className="w-4 h-4 mr-2" />
+              {t('theme-customization')}
+            </TabsTrigger>
+            <TabsTrigger value="audit" className="rounded-xl px-6 data-[state=active]:btn-rose">
+              <History className="w-4 h-4 mr-2" />
+              {t('audit-logs')}
+            </TabsTrigger>
+            <TabsTrigger value="backup" className="rounded-xl px-6 data-[state=active]:btn-rose">
+              <Database className="w-4 h-4 mr-2" />
+              {t('backup-restore')}
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="profile">
-          <div className="card-cute p-8 max-w-2xl">
+          <div className={settingsBoxClass}>
             <h3 className="playfair text-xl font-bold text-rose-500 mb-8">{t('profile')}</h3>
             <div className="space-y-6">
               <div className="space-y-2">
@@ -184,7 +189,7 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
         </TabsContent>
 
         <TabsContent value="theme">
-          <div className="card-cute p-8 max-w-2xl">
+          <div className={settingsBoxClass}>
             <h3 className="playfair text-xl font-bold text-rose-500 mb-8">{t('theme-customization')}</h3>
             <div className="space-y-6">
               <div className="space-y-2">
@@ -218,7 +223,7 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
         </TabsContent>
 
         <TabsContent value="audit">
-          <div className="card-cute p-8">
+          <div className={settingsBoxClass}>
             <h3 className="playfair text-xl font-bold text-rose-500 mb-8">{t('audit-logs')}</h3>
             <div className="overflow-hidden rounded-2xl border-2 border-rose-100 dark:border-rose-900">
               <Table>
@@ -252,7 +257,7 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
         </TabsContent>
 
         <TabsContent value="backup">
-          <div className="card-cute p-8 max-w-2xl">
+          <div className={settingsBoxClass}>
             <div className="flex items-center gap-2 mb-8">
               <Database className="w-6 h-6 text-rose-500" />
               <h3 className="playfair text-xl font-bold text-rose-500">{t('backup-restore')}</h3>
