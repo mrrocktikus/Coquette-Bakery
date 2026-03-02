@@ -1,6 +1,7 @@
 import React from 'react';
 import { Package, CheckCircle, AlertTriangle, Clock } from 'lucide-react';
 import { InventoryItem, StockMovement } from '@/hooks/useInventory';
+import Overview from './Overview';
 
 interface Props {
   t: (key: string) => string;
@@ -44,11 +45,13 @@ const DashboardHome = ({ t, inventory, movements }: Props) => {
             <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-4 shadow-lg`}>
               <stat.icon className="w-8 h-8 text-white" />
             </div>
-            <h3 className="text-gray-500 font-semibold mb-1">{stat.label}</h3>
+            <h3 className="text-gray-500 font-semibold mb-1 dark:text-gray-400">{stat.label}</h3>
             <p className="playfair text-4xl font-bold text-gray-800 dark:text-white">{stat.value}</p>
           </div>
         ))}
       </div>
+
+      <Overview t={t} inventory={inventory} />
 
       <div className="card-cute p-8">
         <div className="flex items-center gap-2 mb-6">
@@ -69,7 +72,7 @@ const DashboardHome = ({ t, inventory, movements }: Props) => {
                 </div>
                 <div className="flex-1">
                   <p className="font-bold text-gray-800 dark:text-gray-200">{m.item_name}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {m.movement_type === 'in' ? t('stock-in') : t('stock-out')}: {m.quantity}
                   </p>
                 </div>

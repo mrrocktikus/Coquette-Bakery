@@ -5,7 +5,6 @@ import {
   LayoutDashboard, 
   PlusCircle, 
   List, 
-  PieChart, 
   ArrowLeftRight, 
   FileText, 
   Settings, 
@@ -14,22 +13,35 @@ import {
   Search,
   Moon,
   Sun,
-  Globe
+  Globe,
+  Trash2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useInventory } from '@/hooks/useInventory';
 import { translations, Language } from '@/lib/translations';
 import { showSuccess } from '@/utils/toast';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Components for sections
 import DashboardHome from '@/components/DashboardHome';
 import RegisterItem from '@/components/RegisterItem';
 import InventoryList from '@/components/InventoryList';
-import Overview from '@/components/Overview';
 import StockManagement from '@/components/StockManagement';
 import Reports from '@/components/Reports';
 import SettingsSection from '@/components/SettingsSection';
+
+interface Notification {
+  id: string;
+  message: string;
+  time: Date;
+  type: 'info' | 'success' | 'warning';
+}
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -37,6 +49,7 @@ const Dashboard = () => {
   const [lang, setLang] = useState<Language>('en');
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
   const [searchTerm, setSearchTerm] = useState('');
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const inventoryHook = useInventory();
   const t = (key: string) => translations[lang][key as keyof typeof translations['en']] || key;
 
@@ -47,6 +60,16 @@ const Dashboard = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [isDark]);
+
+  const addNotification = (message: string, type: Notification['type'] = 'info') => {
+    const newNotif = {
+      id: Math.random().toString(36).substr(2, 9),
+      message,
+      time: new Date(),
+      type
+    };
+    setNotifications(prev => [newNotif, ...prev].slice(0, 10));
+  };
 
   const handleLogout = () => {
     showSuccess('Logged out successfully');
@@ -61,11 +84,22 @@ const Dashboard = () => {
     { id: 'dashboard', label: t('dashboard'), icon: LayoutDashboard },
     { id: 'register', label: t('register-item'), icon: PlusCircle },
     { id: 'inventory', label: t('inventory'), icon: List },
-    { id: 'overview', label: t('overview'), icon: PieChart },
     { id: 'stock', label: t('stock'), icon: ArrowLeftRight },
     { id: 'reports', label: t('reports'), icon: FileText },
     { id: 'settings', label: t('settings'), icon: Settings },
   ];
+
+  // Wrap inventory actions to include notifications
+  const handleAddItem = (item: any) => {
+    inventoryHook.addItem(item);
+    addNotification(`New item registered: ${item.item_name}`, 'success');
+  };
+
+  const handleAddMovement = (movement: any) => {
+    inventoryHook.addMovement(movement);
+    const action = movement.movement_type === 'in' ? 'Added' : 'Removed';
+    addNotification(`${action} ${movement.quantity} units of ${movement.item_name}`, 'info');
+  };
 
   return (
     <div className={`min-h-screen flex flex-col bg-[#f9f5f2] dark:bg-[#1a1a2e] transition-colors duration-300`}>
@@ -104,10 +138,36 @@ const Dashboard = () => {
             <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="text-rose-500">
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </Button>
-            <Button variant="ghost" size="icon" className="text-rose-500 relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-            </Button>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-rose-500 relative">
+                  <Bell className="w-5 h-5" />
+                  {notifications.length > 0 && (
+                    <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-80 rounded-2xl p-2 border-2 border-rose-100">
+                <div className="p-2 border-b border-rose-50 mb-2 flex justify-between items-center">
+                  <span className="font-bold text-rose-500">Notifications</span>
+                  <Button variant="ghost" size="sm" onClick={() => setNotifications([])} className="text-xs text-gray-400">Clear</Button>
+                </div>
+                <div className="max-h-64 overflow-y-auto scrollbar-hide">
+                  {notifications.length === 0 ? (
+                    <div className="p-4 text-center text-gray-400 text-sm">No new notifications</div>
+                  ) : (
+                    notifications.map(n => (
+                      <DropdownMenuItem key={n.id} className="flex flex-col items-start p-3 rounded-xl mb-1 focus:bg-rose-50">
+                        <span className="text-sm font-semibold text-gray-800">{n.message}</span>
+                        <span className="text-xs text-gray-400">{n.time.toLocaleTimeString()}</span>
+                      </DropdownMenuItem>
+                    ))
+                  )}
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Button variant="outline" onClick={handleLogout} className="hidden md:flex border-2 border-rose-200 text-rose-500 hover:bg-rose-50 rounded-xl dark:border-rose-800 dark:text-rose-400">
               <LogOut className="w-4 h-4 mr-2" />
               {t('logout')}
@@ -145,8 +205,19 @@ const Dashboard = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {activeSection === 'dashboard' && <DashboardHome t={t} inventory={inventoryHook.inventory} movements={inventoryHook.movements} />}
-            {activeSection === 'register' && <RegisterItem t={t} onAdd={inventoryHook.addItem} />}
+            {activeSection === 'dashboard' && (
+              <DashboardHome 
+                t={t} 
+                inventory={inventoryHook.inventory} 
+                movements={inventoryHook.movements} 
+              />
+            )}
+            {activeSection === 'register' && (
+              <RegisterItem 
+                t={t} 
+                onAdd={handleAddItem} 
+              />
+            )}
             {activeSection === 'inventory' && (
               <InventoryList 
                 t={t} 
@@ -156,9 +227,24 @@ const Dashboard = () => {
                 externalSearchTerm={searchTerm}
               />
             )}
-            {activeSection === 'overview' && <Overview t={t} inventory={inventoryHook.inventory} />}
-            {activeSection === 'stock' && <StockManagement t={t} inventory={inventoryHook.inventory} movements={inventoryHook.movements} onAddMovement={inventoryHook.addMovement} onDeleteMovement={inventoryHook.deleteMovement} />}
-            {activeSection === 'reports' && <Reports t={t} inventory={inventoryHook.inventory} />}
+            {activeSection === 'stock' && (
+              <StockManagement 
+                t={t} 
+                inventory={inventoryHook.inventory} 
+                movements={inventoryHook.movements} 
+                onAddMovement={handleAddMovement} 
+                onDeleteMovement={inventoryHook.deleteMovement} 
+              />
+            )}
+            {activeSection === 'reports' && (
+              <Reports 
+                t={t} 
+                inventory={inventoryHook.inventory} 
+                maintenance={inventoryHook.maintenance}
+                onAddMaintenance={inventoryHook.addMaintenance}
+                onDeleteMaintenance={inventoryHook.deleteMaintenance}
+              />
+            )}
             {activeSection === 'settings' && (
               <SettingsSection 
                 t={t} 

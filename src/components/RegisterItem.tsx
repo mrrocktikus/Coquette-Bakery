@@ -47,14 +47,14 @@ const RegisterItem = ({ t, onAdd }: Props) => {
                 value={formData.item_name}
                 onChange={(e) => setFormData({...formData, item_name: e.target.value})}
                 placeholder="e.g., Copper Wire" 
-                className="rounded-xl border-2 border-rose-200"
+                className="rounded-xl border-2 border-rose-200 dark:bg-rose-900/10 dark:border-rose-800"
                 required
               />
             </div>
             <div className="space-y-2">
               <Label>{t('type')}</Label>
               <Select onValueChange={(v) => setFormData({...formData, item_type: v})}>
-                <SelectTrigger className="rounded-xl border-2 border-rose-200">
+                <SelectTrigger className="rounded-xl border-2 border-rose-200 dark:bg-rose-900/10 dark:border-rose-800">
                   <SelectValue placeholder="Select Type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -70,7 +70,7 @@ const RegisterItem = ({ t, onAdd }: Props) => {
             <div className="space-y-2">
               <Label>{t('category')}</Label>
               <Select onValueChange={(v) => setFormData({...formData, category: v})}>
-                <SelectTrigger className="rounded-xl border-2 border-rose-200">
+                <SelectTrigger className="rounded-xl border-2 border-rose-200 dark:bg-rose-900/10 dark:border-rose-800">
                   <SelectValue placeholder="Select Category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -89,7 +89,7 @@ const RegisterItem = ({ t, onAdd }: Props) => {
             <div className="space-y-2">
               <Label>{t('location')}</Label>
               <Select onValueChange={(v) => setFormData({...formData, location: v})}>
-                <SelectTrigger className="rounded-xl border-2 border-rose-200">
+                <SelectTrigger className="rounded-xl border-2 border-rose-200 dark:bg-rose-900/10 dark:border-rose-800">
                   <SelectValue placeholder="Select Location" />
                 </SelectTrigger>
                 <SelectContent>
@@ -105,7 +105,7 @@ const RegisterItem = ({ t, onAdd }: Props) => {
               type="number"
               value={formData.quantity}
               onChange={(e) => setFormData({...formData, quantity: parseInt(e.target.value) || 0})}
-              className="rounded-xl border-2 border-rose-200"
+              className="rounded-xl border-2 border-rose-200 dark:bg-rose-900/10 dark:border-rose-800"
               min="0"
             />
           </div>
@@ -116,7 +116,7 @@ const RegisterItem = ({ t, onAdd }: Props) => {
               value={formData.description}
               onChange={(e) => setFormData({...formData, description: e.target.value})}
               placeholder="Add any additional details..."
-              className="rounded-xl border-2 border-rose-200 min-h-[100px]"
+              className="rounded-xl border-2 border-rose-200 dark:bg-rose-900/10 dark:border-rose-800 min-h-[100px]"
             />
           </div>
 
