@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, AlertCircle, Download, Wrench, Trash2 } from 'lucide-react';
+import { FileText, AlertCircle, Download, Wrench, Trash2, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -12,10 +12,11 @@ interface Props {
   inventory: InventoryItem[];
   maintenance: MaintenanceRequest[];
   onAddMaintenance: (req: any) => void;
+  onResolveMaintenance: (id: string) => void;
   onDeleteMaintenance: (id: string) => void;
 }
 
-const Reports = ({ t, inventory, maintenance, onAddMaintenance, onDeleteMaintenance }: Props) => {
+const Reports = ({ t, inventory, maintenance, onAddMaintenance, onResolveMaintenance, onDeleteMaintenance }: Props) => {
   const [report, setReport] = useState<{ title: string; content: string } | null>(null);
   const [maintForm, setMaintForm] = useState({ equipment: '', type: '', desc: '' });
 
@@ -143,14 +144,36 @@ const Reports = ({ t, inventory, maintenance, onAddMaintenance, onDeleteMaintena
                 <p className="text-gray-400 text-center py-4 text-sm">No requests yet</p>
               ) : (
                 [...maintenance].reverse().map(m => (
-                  <div key={m.id} className="flex items-center gap-3 p-3 bg-rose-50/30 dark:bg-rose-900/10 rounded-xl border border-rose-100 dark:border-rose-900/20">
-                    <div className="flex-1">
-                      <p className="text-sm font-bold text-gray-800 dark:text-gray-200">{m.equipment_name}</p>
-                      <p className="text-xs text-rose-500 font-semibold">{m.issue_type}</p>
+                  <div key={m.id} className="flex flex-col gap-2 p-4 bg-rose-50/30 dark:bg-rose-900/10 rounded-xl border border-rose-100 dark:border-rose-900/20">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-bold text-gray-800 dark:text-gray-200">{m.equipment_name}</p>
+                        <p className="text-xs text-rose-500 font-semibold">{m.issue_type}</p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {m.status === 'fixed' ? (
+                          <span className="flex items-center gap-1 px-2 py-1 bg-green-100 text-green-600 text-[10px] font-bold rounded-full uppercase">
+                            <CheckCircle2 className="w-3 h-3" />
+                            Fixed
+                          </span>
+                        ) : (
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            onClick={() => onResolveMaintenance(m.id)}
+                            className="h-7 px-2 text-[10px] font-bold border-green-200 text-green-600 hover:bg-green-50 rounded-full"
+                          >
+                            Mark As Fixed
+                          </Button>
+                        )}
+                        <Button variant="ghost" size="icon" onClick={() => onDeleteMaintenance(m.id)} className="h-7 w-7 text-gray-400 hover:text-rose-500">
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => onDeleteMaintenance(m.id)} className="text-gray-400 hover:text-rose-500">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    {m.description && (
+                      <p className="text-xs text-gray-500 dark:text-gray-400 italic">"{m.description}"</p>
+                    )}
                   </div>
                 ))
               )}

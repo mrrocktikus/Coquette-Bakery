@@ -27,6 +27,7 @@ export interface MaintenanceRequest {
   equipment_name: string;
   issue_type: string;
   description: string;
+  status: 'pending' | 'fixed';
   created_at: string;
 }
 
@@ -117,14 +118,22 @@ export function useInventory() {
     showSuccess(`Stock ${movement.movement_type} recorded`);
   };
 
-  const addMaintenance = (request: Omit<MaintenanceRequest, 'id' | 'created_at'>) => {
+  const addMaintenance = (request: Omit<MaintenanceRequest, 'id' | 'created_at' | 'status'>) => {
     const newRequest: MaintenanceRequest = {
       ...request,
       id: Math.random().toString(36).substr(2, 9),
+      status: 'pending',
       created_at: new Date().toISOString(),
     };
     setMaintenance(prev => [...prev, newRequest]);
     showSuccess('Maintenance request submitted');
+  };
+
+  const resolveMaintenance = (id: string) => {
+    setMaintenance(prev => prev.map(m => 
+      m.id === id ? { ...m, status: 'fixed' } : m
+    ));
+    showSuccess('Issue marked as fixed');
   };
 
   const deleteMaintenance = (id: string) => {
@@ -157,6 +166,7 @@ export function useInventory() {
     addMovement,
     deleteMovement,
     addMaintenance,
+    resolveMaintenance,
     deleteMaintenance
   };
 }

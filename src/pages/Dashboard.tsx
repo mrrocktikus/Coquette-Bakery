@@ -243,6 +243,7 @@ const Dashboard = () => {
                 inventory={inventoryHook.inventory} 
                 maintenance={inventoryHook.maintenance}
                 onAddMaintenance={inventoryHook.addMaintenance}
+                onResolveMaintenance={inventoryHook.resolveMaintenance}
                 onDeleteMaintenance={inventoryHook.deleteMaintenance}
               />
             )}
