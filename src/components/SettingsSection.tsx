@@ -16,7 +16,7 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
     <div className="space-y-8">
       <h2 className="playfair text-3xl font-bold text-rose-500">{t('settings')}</h2>
       
-      <div className="card-cute p-8 max-w-2xl">
+      <div className="card-cute p-8">
         <h3 className="playfair text-xl font-bold text-rose-500 mb-8">{t('profile')}</h3>
         
         <div className="space-y-6">
