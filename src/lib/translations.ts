@@ -73,7 +73,15 @@ export const translations = {
     'repair-type': 'Repair',
     'choose-item': 'Choose an item...',
     'supplier': 'Supplier',
-    'profile-success': 'Profile updated successfully!'
+    'profile-success': 'Profile updated successfully!',
+    'backup-restore': 'Backup & Restore',
+    'export-data': 'Export Data',
+    'import-data': 'Import Data',
+    'export-desc': 'Download a backup of all your inventory and settings.',
+    'import-desc': 'Restore your data from a previously exported backup file.',
+    'backup-success': 'Data exported successfully!',
+    'restore-success': 'Data restored successfully! The page will reload.',
+    'restore-error': 'Invalid backup file.'
   },
   ms: {
     'dashboard': 'Papan Pemantauan',
@@ -149,7 +157,15 @@ export const translations = {
     'repair-type': 'Pembaikan',
     'choose-item': 'Pilih satu item...',
     'supplier': 'Pembekal',
-    'profile-success': 'Profil berjaya dikemas kini!'
+    'profile-success': 'Profil berjaya dikemas kini!',
+    'backup-restore': 'Sandaran & Pulihkan',
+    'export-data': 'Eksport Data',
+    'import-data': 'Import Data',
+    'export-desc': 'Muat turun salinan sandaran semua inventori dan tetapan anda.',
+    'import-desc': 'Pulihkan data anda daripada fail sandaran yang dieksport sebelum ini.',
+    'backup-success': 'Data berjaya dieksport!',
+    'restore-success': 'Data berjaya dipulihkan! Halaman akan dimuat semula.',
+    'restore-error': 'Fail sandaran tidak sah.'
   }
 };
 
