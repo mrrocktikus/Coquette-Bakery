@@ -31,7 +31,8 @@ const InventoryList = ({ t, inventory, onDelete, onUpdate, externalSearchTerm = 
   const filteredItems = inventory.filter(item => {
     const matchesSearch = item.item_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         item.description.toLowerCase().includes(searchTerm.toLowerCase());
+                         item.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (item.supplier && item.supplier.toLowerCase().includes(searchTerm.toLowerCase()));
     
     const matchesCategory = categoryFilter === 'all' || item.category === categoryFilter;
     const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
@@ -155,6 +156,7 @@ const InventoryList = ({ t, inventory, onDelete, onUpdate, externalSearchTerm = 
                 <TableHead className="font-bold text-rose-700 dark:text-rose-300">{t('name')}</TableHead>
                 <TableHead className="font-bold text-rose-700 dark:text-rose-300">{t('type')}</TableHead>
                 <TableHead className="font-bold text-rose-700 dark:text-rose-300">{t('category')}</TableHead>
+                <TableHead className="font-bold text-rose-700 dark:text-rose-300">{t('supplier')}</TableHead>
                 <TableHead className="font-bold text-rose-700 dark:text-rose-300">{t('qty')}</TableHead>
                 <TableHead className="font-bold text-rose-700 dark:text-rose-300">{t('status')}</TableHead>
                 <TableHead className="font-bold text-rose-700 dark:text-rose-300 text-right">{t('actions')}</TableHead>
@@ -163,7 +165,7 @@ const InventoryList = ({ t, inventory, onDelete, onUpdate, externalSearchTerm = 
             <TableBody>
               {filteredItems.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-12 text-gray-500 dark:text-gray-400">
+                  <TableCell colSpan={7} className="text-center py-12 text-gray-500 dark:text-gray-400">
                     {t('no-items')}
                   </TableCell>
                 </TableRow>
@@ -173,6 +175,7 @@ const InventoryList = ({ t, inventory, onDelete, onUpdate, externalSearchTerm = 
                     <TableCell className="font-semibold dark:text-gray-200">{item.item_name}</TableCell>
                     <TableCell className="dark:text-gray-300">{item.item_type}</TableCell>
                     <TableCell className="dark:text-gray-300">{item.category}</TableCell>
+                    <TableCell className="dark:text-gray-300">{item.supplier || '-'}</TableCell>
                     <TableCell className="font-bold dark:text-gray-200">{item.quantity}</TableCell>
                     <TableCell>
                       <span className={`px-3 py-1 rounded-full text-xs font-bold border ${getStatusColor(item.status)}`}>
