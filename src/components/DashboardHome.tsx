@@ -37,7 +37,7 @@ const DashboardHome = ({ t, inventory, movements }: Props) => {
 
   return (
     <div className="space-y-8">
-      <h2 className="playfair text-3xl font-bold text-rose-500">{t('dashboard')}</h2>
+      <h2 className="playfair text-3xl font-bold text-rose-500 text-center">{t('dashboard')}</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat, idx) => (

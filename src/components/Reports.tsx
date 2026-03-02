@@ -46,7 +46,7 @@ const Reports = ({ t, inventory, maintenance, onAddMaintenance, onResolveMainten
 
   return (
     <div className="space-y-8">
-      <h2 className="playfair text-3xl font-bold text-rose-500">{t('reports')}</h2>
+      <h2 className="playfair text-3xl font-bold text-rose-500 text-center">{t('reports')}</h2>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Inventory Reports */}

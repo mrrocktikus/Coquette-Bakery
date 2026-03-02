@@ -44,7 +44,7 @@ const StockManagement = ({ t, inventory, movements, onAddMovement, onDeleteMovem
 
   return (
     <div className="space-y-8">
-      <h2 className="playfair text-3xl font-bold text-rose-500">{t('stock')}</h2>
+      <h2 className="playfair text-3xl font-bold text-rose-500 text-center">{t('stock')}</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Stock In */}

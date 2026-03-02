@@ -59,8 +59,9 @@ const InventoryList = ({ t, inventory, onDelete, onUpdate, externalSearchTerm = 
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <h2 className="playfair text-3xl font-bold text-rose-500">{t('inventory')}</h2>
+      <h2 className="playfair text-3xl font-bold text-rose-500 text-center">{t('inventory')}</h2>
+      
+      <div className="flex flex-col md:flex-row md:items-center justify-end gap-4">
         <div className="flex items-center gap-2">
           <div className="relative flex-1 md:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-rose-400" />
