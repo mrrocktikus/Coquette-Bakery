@@ -13,8 +13,7 @@ import {
   Search,
   Moon,
   Sun,
-  Globe,
-  Trash2
+  Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -53,6 +52,9 @@ const Dashboard = () => {
   const inventoryHook = useInventory();
   const t = (key: string) => translations[lang][key as keyof typeof translations['en']] || key;
 
+  // Mock username for the welcome message
+  const username = "Ling Chung Seng";
+
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
@@ -89,7 +91,6 @@ const Dashboard = () => {
     { id: 'settings', label: t('settings'), icon: Settings },
   ];
 
-  // Wrap inventory actions to include notifications
   const handleAddItem = (item: any) => {
     inventoryHook.addItem(item);
     addNotification(`New item registered: ${item.item_name}`, 'success');
@@ -114,7 +115,7 @@ const Dashboard = () => {
             />
             <div className="hidden sm:block">
               <h1 className="playfair text-xl font-bold text-rose-500">Coquette Bakery</h1>
-              <p className="text-xs text-rose-400 font-semibold">Inventory System</p>
+              <p className="text-xs text-rose-400 font-semibold">Welcome, {username}!</p>
             </div>
           </div>
 
@@ -175,8 +176,8 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Mobile/Tablet Nav Links */}
-        <div className="max-w-[1400px] mx-auto mt-4 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        {/* Centered Navigation Links */}
+        <div className="max-w-[1400px] mx-auto mt-4 flex justify-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {navItems.map((item) => (
             <Button
               key={item.id}

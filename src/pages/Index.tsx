@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, EyeOff, ArrowLeft, Heart } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { showSuccess, showError } from '@/utils/toast';
+import { showSuccess } from '@/utils/toast';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -64,8 +64,7 @@ const Index = () => {
                 className="space-y-8"
               >
                 <div className="text-center space-y-2">
-                  <Heart className="w-12 h-12 text-rose-400 mx-auto mb-4" />
-                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Welcome, Darling!</h2>
+                  <h2 className="text-3xl font-bold text-gray-800 dark:text-white">Welcome!</h2>
                   <p className="text-gray-600 dark:text-gray-400">Are you a Staff or Student?</p>
                 </div>
                 <div className="flex flex-col gap-4">
