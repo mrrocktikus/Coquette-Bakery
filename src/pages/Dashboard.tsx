@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -35,9 +35,18 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('dashboard');
   const [lang, setLang] = useState<Language>('en');
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
+  const [searchTerm, setSearchTerm] = useState('');
   const inventoryHook = useInventory();
   const t = (key: string) => translations[lang][key as keyof typeof translations['en']] || key;
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDark]);
 
   const handleLogout = () => {
     showSuccess('Logged out successfully');
@@ -46,7 +55,6 @@ const Dashboard = () => {
 
   const toggleDarkMode = () => {
     setIsDark(!isDark);
-    document.documentElement.classList.toggle('dark');
   };
 
   const navItems = [
@@ -80,7 +88,12 @@ const Dashboard = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-rose-400" />
             <Input 
               placeholder={t('search')} 
-              className="pl-10 rounded-2xl border-2 border-[#e8a0b0] bg-rose-50/50"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                if (activeSection !== 'inventory') setActiveSection('inventory');
+              }}
+              className="pl-10 rounded-2xl border-2 border-[#e8a0b0] bg-rose-50/50 dark:bg-rose-900/10"
             />
           </div>
 
@@ -95,7 +108,7 @@ const Dashboard = () => {
               <Bell className="w-5 h-5" />
               <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
             </Button>
-            <Button variant="outline" onClick={handleLogout} className="hidden md:flex border-2 border-rose-200 text-rose-500 hover:bg-rose-50 rounded-xl">
+            <Button variant="outline" onClick={handleLogout} className="hidden md:flex border-2 border-rose-200 text-rose-500 hover:bg-rose-50 rounded-xl dark:border-rose-800 dark:text-rose-400">
               <LogOut className="w-4 h-4 mr-2" />
               {t('logout')}
             </Button>
@@ -112,7 +125,7 @@ const Dashboard = () => {
               className={`rounded-full px-6 whitespace-nowrap transition-all duration-300 ${
                 activeSection === item.id 
                   ? "btn-rose" 
-                  : "text-rose-400 hover:bg-rose-50 hover:text-rose-600"
+                  : "text-rose-400 hover:bg-rose-50 hover:text-rose-600 dark:text-rose-300 dark:hover:bg-rose-900/20"
               }`}
             >
               <item.icon className="w-4 h-4 mr-2" />
@@ -134,11 +147,25 @@ const Dashboard = () => {
           >
             {activeSection === 'dashboard' && <DashboardHome t={t} inventory={inventoryHook.inventory} movements={inventoryHook.movements} />}
             {activeSection === 'register' && <RegisterItem t={t} onAdd={inventoryHook.addItem} />}
-            {activeSection === 'inventory' && <InventoryList t={t} inventory={inventoryHook.inventory} onDelete={inventoryHook.deleteItem} onUpdate={inventoryHook.updateItem} />}
+            {activeSection === 'inventory' && (
+              <InventoryList 
+                t={t} 
+                inventory={inventoryHook.inventory} 
+                onDelete={inventoryHook.deleteItem} 
+                onUpdate={inventoryHook.updateItem}
+                externalSearchTerm={searchTerm}
+              />
+            )}
             {activeSection === 'overview' && <Overview t={t} inventory={inventoryHook.inventory} />}
             {activeSection === 'stock' && <StockManagement t={t} inventory={inventoryHook.inventory} movements={inventoryHook.movements} onAddMovement={inventoryHook.addMovement} onDeleteMovement={inventoryHook.deleteMovement} />}
             {activeSection === 'reports' && <Reports t={t} inventory={inventoryHook.inventory} />}
-            {activeSection === 'settings' && <SettingsSection t={t} />}
+            {activeSection === 'settings' && (
+              <SettingsSection 
+                t={t} 
+                isDark={isDark} 
+                onToggleDark={toggleDarkMode} 
+              />
+            )}
           </motion.div>
         </AnimatePresence>
       </main>
