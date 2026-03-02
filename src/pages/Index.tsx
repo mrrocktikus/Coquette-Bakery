@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,6 +14,7 @@ const Index = () => {
   const [role, setRole] = useState<'staff' | 'student' | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
 
   const handleRoleSelect = (selectedRole: 'staff' | 'student') => {
     setRole(selectedRole);
@@ -29,6 +30,18 @@ const Index = () => {
       showSuccess('Welcome back to Coquette Bakery!');
       navigate('/dashboard');
     }, 1000);
+  };
+
+  const handleResetPassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    // Mock reset
+    setTimeout(() => {
+      setIsLoading(false);
+      showSuccess(`Reset instructions sent to ${resetEmail}`);
+      setView('login');
+      setResetEmail('');
+    }, 1500);
   };
 
   return (
@@ -183,6 +196,48 @@ const Index = () => {
                   <Button type="submit" className="w-full h-12 rounded-xl btn-rose font-bold">Create Account</Button>
                   <p className="text-center text-sm text-gray-600">
                     Already have an account? <button type="button" onClick={() => setView('login')} className="text-rose-500 font-bold">Log In</button>
+                  </p>
+                </form>
+              </motion.div>
+            )}
+
+            {view === 'forgot' && (
+              <motion.div
+                key="forgot"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-6"
+              >
+                <div className="flex items-center gap-2 mb-6">
+                  <Button variant="ghost" size="icon" onClick={() => setView('login')}>
+                    <ArrowLeft className="w-5 h-5" />
+                  </Button>
+                  <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Forgot Password</h2>
+                </div>
+                <div className="p-6 bg-rose-50 rounded-2xl border-2 border-rose-100 text-center space-y-2">
+                  <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Mail className="text-rose-500 w-6 h-6" />
+                  </div>
+                  <p className="text-sm text-gray-600">Enter your email or ID and we'll send you instructions to reset your password.</p>
+                </div>
+                <form onSubmit={handleResetPassword} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Email or ID</Label>
+                    <Input 
+                      type="text" 
+                      placeholder="Enter your email or ID" 
+                      className="rounded-xl border-2 border-[#e8a0b0] bg-white/50" 
+                      value={resetEmail}
+                      onChange={(e) => setResetEmail(e.target.value)}
+                      required 
+                    />
+                  </div>
+                  <Button type="submit" className="w-full h-12 rounded-xl btn-rose font-bold" disabled={isLoading}>
+                    {isLoading ? "Sending..." : "Send Reset Link"}
+                  </Button>
+                  <p className="text-center text-sm text-gray-600">
+                    Remember your password? <button type="button" onClick={() => setView('login')} className="text-rose-500 font-bold">Back to Login</button>
                   </p>
                 </form>
               </motion.div>
