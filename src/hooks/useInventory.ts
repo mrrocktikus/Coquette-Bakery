@@ -9,6 +9,7 @@ export interface InventoryItem {
   location: string;
   quantity: number;
   description: string;
+  supplier: string;
   status: 'In Stock' | 'Low Stock' | 'Out of Stock';
   created_at: string;
 }

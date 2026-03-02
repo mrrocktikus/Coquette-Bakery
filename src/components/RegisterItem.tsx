@@ -17,7 +17,8 @@ const RegisterItem = ({ t, onAdd }: Props) => {
     category: '',
     location: '',
     quantity: 0,
-    description: ''
+    description: '',
+    supplier: ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -30,7 +31,8 @@ const RegisterItem = ({ t, onAdd }: Props) => {
       category: '',
       location: '',
       quantity: 0,
-      description: ''
+      description: '',
+      supplier: ''
     });
   };
 
@@ -99,19 +101,30 @@ const RegisterItem = ({ t, onAdd }: Props) => {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label>{t('qty')}</Label>
-            <Input 
-              type="number"
-              value={formData.quantity === 0 ? '' : formData.quantity}
-              onChange={(e) => {
-                const val = e.target.value;
-                setFormData({...formData, quantity: val === '' ? 0 : parseInt(val)});
-              }}
-              placeholder="0"
-              className="rounded-xl border-2 border-rose-200 dark:bg-rose-900/10 dark:border-rose-800"
-              min="0"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label>{t('qty')}</Label>
+              <Input 
+                type="number"
+                value={formData.quantity === 0 ? '' : formData.quantity}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setFormData({...formData, quantity: val === '' ? 0 : parseInt(val)});
+                }}
+                placeholder="0"
+                className="rounded-xl border-2 border-rose-200 dark:bg-rose-900/10 dark:border-rose-800"
+                min="0"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>{t('supplier')}</Label>
+              <Input 
+                value={formData.supplier}
+                onChange={(e) => setFormData({...formData, supplier: e.target.value})}
+                placeholder="e.g., Global Supplies Co." 
+                className="rounded-xl border-2 border-rose-200 dark:bg-rose-900/10 dark:border-rose-800"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">

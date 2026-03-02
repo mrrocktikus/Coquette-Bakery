@@ -71,7 +71,8 @@ export const translations = {
     'maintenance-type': 'Maintenance',
     'complaint-type': 'Complaint',
     'repair-type': 'Repair',
-    'choose-item': 'Choose an item...'
+    'choose-item': 'Choose an item...',
+    'supplier': 'Supplier'
   },
   ms: {
     'dashboard': 'Papan Pemantauan',
@@ -145,7 +146,8 @@ export const translations = {
     'maintenance-type': 'Penyelenggaraan',
     'complaint-type': 'Aduan',
     'repair-type': 'Pembaikan',
-    'choose-item': 'Pilih satu item...'
+    'choose-item': 'Pilih satu item...',
+    'supplier': 'Pembekal'
   }
 };
 

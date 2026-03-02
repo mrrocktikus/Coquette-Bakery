@@ -29,7 +29,8 @@ const EditItemDialog = ({ t, item, onUpdate }: Props) => {
     category: item.category,
     location: item.location,
     quantity: item.quantity,
-    description: item.description
+    description: item.description,
+    supplier: item.supplier || ''
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -105,6 +106,16 @@ const EditItemDialog = ({ t, item, onUpdate }: Props) => {
                 min="0"
               />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label>{t('supplier')}</Label>
+            <Input 
+              value={formData.supplier}
+              onChange={(e) => setFormData({...formData, supplier: e.target.value})}
+              className="rounded-xl border-2 border-rose-100"
+              placeholder="Supplier name"
+            />
           </div>
 
           <div className="space-y-2">
