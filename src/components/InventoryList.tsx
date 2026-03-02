@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Filter, Trash2, Edit, Search, X } from 'lucide-react';
+import { Filter, Trash2, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { InventoryItem } from '@/hooks/useInventory';
+import EditItemDialog from './EditItemDialog';
 
 interface Props {
   t: (key: string) => string;
@@ -180,9 +181,7 @@ const InventoryList = ({ t, inventory, onDelete, onUpdate, externalSearchTerm = 
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button variant="ghost" size="icon" className="text-blue-500 hover:text-blue-700 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20">
-                          <Edit className="w-4 h-4" />
-                        </Button>
+                        <EditItemDialog t={t} item={item} onUpdate={onUpdate} />
                         <Button 
                           variant="ghost" 
                           size="icon" 
