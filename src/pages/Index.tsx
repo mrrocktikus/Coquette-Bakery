@@ -32,11 +32,17 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-[#f9f5f2] dark:bg-[#1a1a2e]">
+    <div 
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat relative"
+      style={{ backgroundImage: "url('https://i.imgur.com/cfElmae.jpeg')" }}
+    >
+      {/* Subtle overlay for better readability */}
+      <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
+
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-card rounded-[40px] shadow-2xl w-full max-w-5xl overflow-hidden border-2 border-[#e8a0b0] flex flex-col md:flex-row"
+        className="bg-white/90 dark:bg-card/90 backdrop-blur-md rounded-[40px] shadow-2xl w-full max-w-5xl overflow-hidden border-2 border-[#e8a0b0] flex flex-col md:flex-row relative z-10"
       >
         {/* Left Side - Branding */}
         <div className="hidden md:flex flex-col items-center justify-center p-12 rose-gradient w-1/2">
@@ -102,11 +108,11 @@ const Index = () => {
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
                     <Label>{role === 'staff' ? 'Staff ID' : 'Student ID'}</Label>
-                    <Input placeholder="Enter your ID" className="rounded-xl border-2 border-[#e8a0b0]" required />
+                    <Input placeholder="Enter your ID" className="rounded-xl border-2 border-[#e8a0b0] bg-white/50" required />
                   </div>
                   <div className="space-y-2">
                     <Label>Username</Label>
-                    <Input placeholder="Enter username" className="rounded-xl border-2 border-[#e8a0b0]" required />
+                    <Input placeholder="Enter username" className="rounded-xl border-2 border-[#e8a0b0] bg-white/50" required />
                   </div>
                   <div className="space-y-2">
                     <Label>Password</Label>
@@ -114,7 +120,7 @@ const Index = () => {
                       <Input 
                         type={showPassword ? "text" : "password"} 
                         placeholder="Enter password" 
-                        className="rounded-xl border-2 border-[#e8a0b0] pr-10" 
+                        className="rounded-xl border-2 border-[#e8a0b0] pr-10 bg-white/50" 
                         required 
                       />
                       <button 
@@ -160,19 +166,19 @@ const Index = () => {
                 <form className="space-y-4">
                   <div className="space-y-2">
                     <Label>{role === 'staff' ? 'Staff ID' : 'Student ID'}</Label>
-                    <Input placeholder="Enter your ID" className="rounded-xl border-2 border-[#e8a0b0]" required />
+                    <Input placeholder="Enter your ID" className="rounded-xl border-2 border-[#e8a0b0] bg-white/50" required />
                   </div>
                   <div className="space-y-2">
                     <Label>Username</Label>
-                    <Input placeholder="Choose username" className="rounded-xl border-2 border-[#e8a0b0]" required />
+                    <Input placeholder="Choose username" className="rounded-xl border-2 border-[#e8a0b0] bg-white/50" required />
                   </div>
                   <div className="space-y-2">
                     <Label>Password</Label>
-                    <Input type="password" placeholder="Create password" className="rounded-xl border-2 border-[#e8a0b0]" required />
+                    <Input type="password" placeholder="Create password" className="rounded-xl border-2 border-[#e8a0b0] bg-white/50" required />
                   </div>
                   <div className="space-y-2">
                     <Label>Confirm Password</Label>
-                    <Input type="password" placeholder="Confirm password" className="rounded-xl border-2 border-[#e8a0b0]" required />
+                    <Input type="password" placeholder="Confirm password" className="rounded-xl border-2 border-[#e8a0b0] bg-white/50" required />
                   </div>
                   <Button type="submit" className="w-full h-12 rounded-xl btn-rose font-bold">Create Account</Button>
                   <p className="text-center text-sm text-gray-600">
