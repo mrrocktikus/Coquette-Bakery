@@ -72,7 +72,8 @@ export const translations = {
     'complaint-type': 'Complaint',
     'repair-type': 'Repair',
     'choose-item': 'Choose an item...',
-    'supplier': 'Supplier'
+    'supplier': 'Supplier',
+    'profile-success': 'Profile updated successfully!'
   },
   ms: {
     'dashboard': 'Papan Pemantauan',
@@ -147,7 +148,8 @@ export const translations = {
     'complaint-type': 'Aduan',
     'repair-type': 'Pembaikan',
     'choose-item': 'Pilih satu item...',
-    'supplier': 'Pembekal'
+    'supplier': 'Pembekal',
+    'profile-success': 'Profil berjaya dikemas kini!'
   }
 };
 

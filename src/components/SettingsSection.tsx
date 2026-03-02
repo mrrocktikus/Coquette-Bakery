@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Mail, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { showSuccess } from '@/utils/toast';
 
 interface Props {
   t: (key: string) => string;
@@ -12,6 +13,22 @@ interface Props {
 }
 
 const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
+  const [name, setName] = useState('Ling Chung Seng');
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    const savedName = localStorage.getItem('user_name');
+    const savedEmail = localStorage.getItem('user_email');
+    if (savedName) setName(savedName);
+    if (savedEmail) setEmail(savedEmail);
+  }, []);
+
+  const handleSave = () => {
+    localStorage.setItem('user_name', name);
+    localStorage.setItem('user_email', email);
+    showSuccess(t('profile-success'));
+  };
+
   return (
     <div className="space-y-8">
       <h2 className="playfair text-3xl font-bold text-rose-500">{t('settings')}</h2>
@@ -33,7 +50,11 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
               <User className="w-4 h-4 text-rose-400" />
               {t('name')}
             </Label>
-            <Input defaultValue="Ling Chung Seng" className="rounded-xl border-2 border-rose-200 dark:border-rose-800 dark:bg-rose-900/10 dark:text-gray-200" />
+            <Input 
+              value={name} 
+              onChange={(e) => setName(e.target.value)}
+              className="rounded-xl border-2 border-rose-200 dark:border-rose-800 dark:bg-rose-900/10 dark:text-gray-200" 
+            />
           </div>
 
           <div className="space-y-2">
@@ -41,7 +62,13 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
               <Mail className="w-4 h-4 text-rose-400" />
               {t('email')}
             </Label>
-            <Input type="email" placeholder="Enter your email" className="rounded-xl border-2 border-rose-200 dark:border-rose-800 dark:bg-rose-900/10 dark:text-gray-200" />
+            <Input 
+              type="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email" 
+              className="rounded-xl border-2 border-rose-200 dark:border-rose-800 dark:bg-rose-900/10 dark:text-gray-200" 
+            />
           </div>
 
           <div className="p-6 bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 rounded-2xl border-2 border-rose-100 dark:border-rose-900">
@@ -54,7 +81,7 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
             </div>
           </div>
 
-          <Button className="w-full h-12 rounded-xl btn-rose font-bold text-lg">
+          <Button onClick={handleSave} className="w-full h-12 rounded-xl btn-rose font-bold text-lg">
             {t('save')}
           </Button>
         </div>
