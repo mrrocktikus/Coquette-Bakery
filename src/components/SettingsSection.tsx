@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { User, Mail, Shield, Download, Upload, Database, Palette, History, Building2, Image as ImageIcon, RotateCcw } from 'lucide-react';
+import { User, Mail, Shield, Download, Upload, Database, Palette, History, Building2, Image as ImageIcon, RotateCcw, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,16 +15,18 @@ interface Props {
   t: (key: string) => string;
   isDark: boolean;
   onToggleDark: () => void;
+  auditLogs: AuditLog[];
+  onDeleteLog: (id: string) => void;
+  onClearLogs: () => void;
 }
 
-const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
+const SettingsSection = ({ t, isDark, onToggleDark, auditLogs, onDeleteLog, onClearLogs }: Props) => {
   const [name, setName] = useState('Ling Chung Seng');
   const [email, setEmail] = useState('');
   const [companyName, setCompanyName] = useState('Coquette Bakery');
   const [logo, setLogo] = useState('https://i.imgur.com/IyEvnDs.png');
   const [headerColor, setHeaderColor] = useState('#ffffff');
   const [buttonColor, setButtonColor] = useState('#e8a0b0');
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const logoInputRef = useRef<HTMLInputElement>(null);
@@ -36,7 +38,6 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
     const savedLogo = localStorage.getItem('company_logo');
     const savedHeader = localStorage.getItem('theme_header_color');
     const savedButton = localStorage.getItem('theme_button_color');
-    const savedLogs = localStorage.getItem('bakery_audit_logs');
 
     if (savedName) setName(savedName);
     if (savedEmail) setEmail(savedEmail);
@@ -44,7 +45,6 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
     if (savedLogo) setLogo(savedLogo);
     if (savedHeader) setHeaderColor(savedHeader);
     if (savedButton) setButtonColor(savedButton);
-    if (savedLogs) setAuditLogs(JSON.parse(savedLogs));
   }, []);
 
   const handleSaveProfile = () => {
@@ -303,7 +303,15 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
 
         <TabsContent value="audit">
           <div className={settingsBoxClass}>
-            <h3 className="playfair text-xl font-bold text-rose-500 mb-8">{t('audit-logs')}</h3>
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="playfair text-xl font-bold text-rose-500">{t('audit-logs')}</h3>
+              {auditLogs.length > 0 && (
+                <Button onClick={onClearLogs} variant="ghost" size="sm" className="text-rose-400 hover:text-rose-600">
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Clear All
+                </Button>
+              )}
+            </div>
             <div className="overflow-hidden rounded-2xl border-2 border-rose-100 dark:border-rose-900">
               <Table>
                 <TableHeader className="bg-rose-50/50 dark:bg-rose-900/20">
@@ -311,12 +319,13 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
                     <TableHead className="font-bold text-rose-700 dark:text-rose-300">{t('log-action')}</TableHead>
                     <TableHead className="font-bold text-rose-700 dark:text-rose-300">{t('log-details')}</TableHead>
                     <TableHead className="font-bold text-rose-700 dark:text-rose-300">{t('log-time')}</TableHead>
+                    <TableHead className="font-bold text-rose-700 dark:text-rose-300 text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {auditLogs.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={3} className="text-center py-12 text-gray-500 dark:text-gray-400">
+                      <TableCell colSpan={4} className="text-center py-12 text-gray-500 dark:text-gray-400">
                         No logs recorded yet
                       </TableCell>
                     </TableRow>
@@ -326,6 +335,16 @@ const SettingsSection = ({ t, isDark, onToggleDark }: Props) => {
                         <TableCell className="font-bold text-rose-600 dark:text-rose-400">{log.action}</TableCell>
                         <TableCell className="dark:text-gray-300">{log.details}</TableCell>
                         <TableCell className="text-xs text-gray-400">{new Date(log.timestamp).toLocaleString()}</TableCell>
+                        <TableCell className="text-right">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => onDeleteLog(log.id)}
+                            className="text-gray-400 hover:text-rose-500"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))
                   )}

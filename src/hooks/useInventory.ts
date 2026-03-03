@@ -86,6 +86,15 @@ export function useInventory() {
     setAuditLogs(prev => [newLog, ...prev].slice(0, 100));
   };
 
+  const deleteLog = (id: string) => {
+    setAuditLogs(prev => prev.filter(log => log.id !== id));
+  };
+
+  const clearLogs = () => {
+    setAuditLogs([]);
+    showSuccess('Audit logs cleared');
+  };
+
   const getStatus = (qty: number): InventoryItem['status'] => {
     if (qty === 0) return 'Out of Stock';
     if (qty < 10) return 'Low Stock';
@@ -122,7 +131,7 @@ export function useInventory() {
   };
 
   const deleteItem = (id: string) => {
-    const item = inventory.find(i => i.id === id);
+    const item = inventory.find(item => item.id === id);
     setInventory(prev => prev.filter(item => item.id !== id));
     if (item) {
       addLog('Delete Item', `Deleted item: ${item.item_name}`);
@@ -215,6 +224,8 @@ export function useInventory() {
     deleteMovement,
     addMaintenance,
     resolveMaintenance,
-    deleteMaintenance
+    deleteMaintenance,
+    deleteLog,
+    clearLogs
   };
 }

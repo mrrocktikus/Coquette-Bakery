@@ -297,6 +297,9 @@ const Dashboard = () => {
                 t={t} 
                 isDark={isDark} 
                 onToggleDark={toggleDarkMode} 
+                auditLogs={inventoryHook.auditLogs}
+                onDeleteLog={inventoryHook.deleteLog}
+                onClearLogs={inventoryHook.clearLogs}
               />
             )}
           </motion.div>
