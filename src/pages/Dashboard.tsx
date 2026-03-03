@@ -13,13 +13,15 @@ import {
   Search,
   Moon,
   Sun,
-  Globe
+  Globe,
+  WifiOff
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useInventory } from '@/hooks/useInventory';
+import { useOfflineStatus } from '@/hooks/useOfflineStatus';
 import { translations, Language } from '@/lib/translations';
-import { showSuccess } from '@/utils/toast';
+import { showSuccess, showError } from '@/utils/toast';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,6 +46,7 @@ interface Notification {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const isOnline = useOfflineStatus();
   const [activeSection, setActiveSection] = useState('dashboard');
   const [lang, setLang] = useState<Language>('en');
   const [isDark, setIsDark] = useState(() => document.documentElement.classList.contains('dark'));
@@ -78,6 +81,15 @@ const Dashboard = () => {
     if (savedHeader) setHeaderColor(savedHeader);
     if (savedButton) setButtonColor(savedButton);
   }, []);
+
+  // Offline/Online notifications
+  useEffect(() => {
+    if (!isOnline) {
+      showError("You are currently offline. Changes will be saved locally.");
+    } else {
+      showSuccess("You are back online!");
+    }
+  }, [isOnline]);
 
   const addNotification = (message: string, type: Notification['type'] = 'info') => {
     const newNotif = {
@@ -144,7 +156,10 @@ const Dashboard = () => {
               className="w-12 h-12 rounded-xl shadow-md object-cover float-animation" 
             />
             <div className="hidden sm:block">
-              <h1 className="playfair text-xl font-bold text-rose-500">{companyName}</h1>
+              <div className="flex items-center gap-2">
+                <h1 className="playfair text-xl font-bold text-rose-500">{companyName}</h1>
+                {!isOnline && <WifiOff className="w-4 h-4 text-red-500 animate-pulse" />}
+              </div>
               <p className="text-xs text-rose-400 font-semibold">Welcome, {username}!</p>
             </div>
           </div>
