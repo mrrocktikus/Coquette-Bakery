@@ -97,6 +97,20 @@ const EditItemDialog = ({ t, item, onUpdate }: Props) => {
               </Select>
             </div>
             <div className="space-y-2">
+              <Label>{t('location')}</Label>
+              <Select value={formData.location} onValueChange={(v) => setFormData({...formData, location: v})}>
+                <SelectTrigger className="rounded-xl border-2 border-rose-100">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Electrical Store">{t('loc-electrical')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
               <Label>{t('qty')}</Label>
               <Input 
                 type="number"
@@ -106,16 +120,15 @@ const EditItemDialog = ({ t, item, onUpdate }: Props) => {
                 min="0"
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t('supplier')}</Label>
-            <Input 
-              value={formData.supplier}
-              onChange={(e) => setFormData({...formData, supplier: e.target.value})}
-              className="rounded-xl border-2 border-rose-100"
-              placeholder="Supplier name"
-            />
+            <div className="space-y-2">
+              <Label>{t('supplier')}</Label>
+              <Input 
+                value={formData.supplier}
+                onChange={(e) => setFormData({...formData, supplier: e.target.value})}
+                className="rounded-xl border-2 border-rose-100"
+                placeholder="Supplier name"
+              />
+            </div>
           </div>
 
           <div className="space-y-2">

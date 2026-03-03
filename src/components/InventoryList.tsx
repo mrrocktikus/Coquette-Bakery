@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { InventoryItem } from '@/hooks/useInventory';
 import EditItemDialog from './EditItemDialog';
+import ViewItemDialog from './ViewItemDialog';
 
 interface Props {
   t: (key: string) => string;
@@ -189,6 +190,7 @@ const InventoryList = ({ t, inventory, onDelete, onUpdate, externalSearchTerm = 
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
+                        <ViewItemDialog t={t} item={item} />
                         <EditItemDialog t={t} item={item} onUpdate={onUpdate} />
                         <Button 
                           variant="ghost" 
